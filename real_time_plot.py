@@ -1,5 +1,4 @@
 # real_time_plot.py
-
 """
 from Corey Schafer
 https://www.youtube.com/watch?v=Ercd-Ip5PfQ

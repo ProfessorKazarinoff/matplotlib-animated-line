@@ -1,5 +1,4 @@
-import matplotlib.pyplot as plt
-import numpy as np
+# animated_line.py
 
 """
 Piston Motion Animation using Python and Matplotlib
