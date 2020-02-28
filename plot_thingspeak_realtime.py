@@ -1,4 +1,4 @@
-# plot_thingspeak.py
+# plot_thingspeak_realtime.py
 """
 A Python script that plots live data from Thingspeak.com using Matplotlib
 inspiration from:
@@ -10,10 +10,7 @@ import requests
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-#plt.style.use('fivethirtyeight')
-
-url1 = "https://api.thingspeak.com/channels/9/fields/1.json?results=1"
-url2 = "https://api.thingspeak.com/channels/9/fields/2.json?results=1"
+url = "https://api.thingspeak.com/channels/9/fields/1.json?results=1"
 
 # function to pull out a float from the requests response object
 def pull_float(response, field_num='1'):
@@ -26,26 +23,21 @@ def pull_float(response, field_num='1'):
 # Create figure for plotting
 fig, ax = plt.subplots()
 xs = []
-ys1 = []
-ys2 = []
+ys = []
 
-def animate(i, xs:list, ys1:list, ys2:list):
+def animate(i, xs:list, ys:list):
     # grab the data from thingspeak.com
-    response1 = requests.get(url1)
-    flt1 = pull_float(response1,'1')
-    response2 = requests.get(url2)
-    flt2 = pull_float(response2,'2')
+    response = requests.get(url)
+    flt = pull_float(response,'1')
     # Add x and y to lists
-    xs.append(dt.datetime.now().strftime('%H:%M:%S.%f'))
-    ys1.append(flt1)
-    ys2.append(flt2)
+    xs.append(dt.datetime.now().strftime('%H:%M:%S'))
+    ys.append(flt)
     # Limit x and y lists to 10 items
     xs = xs[-10:]
-    ys1 = ys1[-10:]
-    ys2 = ys2[-10:]
+    ys = ys[-10:]
     # Draw x and y lists
     ax.clear()
-    ax.plot(xs, ys1)
+    ax.plot(xs, ys)
     # Format plot
     ax.set_ylim([175,225])
     plt.xticks(rotation=45, ha='right')
@@ -54,5 +46,5 @@ def animate(i, xs:list, ys1:list, ys2:list):
     plt.ylabel('Light Reading')
 
 # Set up plot to call animate() function periodically
-ani = animation.FuncAnimation(fig, animate, fargs=(xs,ys1,ys2), interval=1000)
+ani = animation.FuncAnimation(fig, animate, fargs=(xs,ys), interval=1000)
 plt.show()
